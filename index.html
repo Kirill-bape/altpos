@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Альт Пос: пакеты, календари и печать с логотипом</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Бумажные и полиэтиленовые пакеты с логотипом, календари и цифровая печать в Москве. Расчёт цены на сайте.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cpath fill='%237d1626' d='M18 2C28 13 29 30 4 56C22 49 35 35 33 20C31 12 26 6 18 2Z'/%3E%3Cpath fill='%2300a0e3' d='M25 5C41 14 50 36 44 58C43 40 36 21 25 5Z'/%3E%3Cpath fill='%23a82133' d='M15 42C30 37 45 29 59 19C48 31 36 40 23 46Z'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&family=Sofia+Sans+Extra+Condensed:wght@700;800&display=swap">
+<style>
+/* Layout: липкая шапка с логотипом → первый экран (заголовок + живой пакет) → каталог → расчёт с липким итогом → заявка → отделка, порядок работы, контакты.
+   Цвета взяты из логотипа «Альт Пос»: бордовый и голубой. */
+:root{
+  --bg:#fbf8f8; --surface:#ffffff; --soft:#f6ecee; --fg:#1d1215; --muted:#6c5c60; --line:#e7dcdf;
+  --accent:#a82133; --accent-deep:#7d1626; --accent-text:#a82133; --on-accent:#ffffff;
+  --blue:#00a0e3; --blue-text:#0074ab;
+  --logo-a:#7d1626; --logo-b:#a82133;
+  --warn:#8a5200; --warn-bg:#fff3d9; --ok:#17713d; --err:#b3261e;
+  --display:"Sofia Sans Extra Condensed","Arial Narrow","Roboto Condensed",sans-serif;
+  --body:"Golos Text","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#150d0f; --surface:#1f1417; --soft:#2a181c; --fg:#f4eaec; --muted:#b9a8ac; --line:#3d292e;
+    --accent:#b8283c; --accent-deep:#8b1a29; --accent-text:#f07b8c; --on-accent:#ffffff;
+    --blue:#2bb4f0; --blue-text:#5cc6f5;
+    --logo-a:#b8283c; --logo-b:#e0566b;
+    --warn:#f1bb5c; --warn-bg:#2d230f; --ok:#62d093; --err:#ff8f86; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#150d0f; --surface:#1f1417; --soft:#2a181c; --fg:#f4eaec; --muted:#b9a8ac; --line:#3d292e;
+  --accent:#b8283c; --accent-deep:#8b1a29; --accent-text:#f07b8c; --on-accent:#ffffff;
+  --blue:#2bb4f0; --blue-text:#5cc6f5;
+  --logo-a:#b8283c; --logo-b:#e0566b;
+  --warn:#f1bb5c; --warn-bg:#2d230f; --ok:#62d093; --err:#ff8f86; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+.page{max-width:1160px;margin-inline:auto;padding-inline:16px;padding-block:0 48px;display:flex;flex-direction:column;gap:64px}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1,h2{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.01em;line-height:.95}
+h1{font-size:clamp(2.75rem,7.2vw,5.25rem)}
+h2{font-size:clamp(2rem,4.4vw,2.875rem)}
+h3{font-size:1rem;font-weight:600;line-height:1.3}
+p{margin:0}
+a{color:var(--accent-text)}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.fig{font-family:var(--display);font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.tnum{font-variant-numeric:tabular-nums}
+
+/* шапка */
+.proto{background:var(--warn-bg);color:var(--warn);font-size:.8125rem;padding:7px 16px;text-align:center}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:1160px;margin-inline:auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px 24px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--accent-text)}
+.logo svg{width:40px;height:40px;flex:none}
+.logo-word{font-family:var(--display);font-weight:800;font-size:1.875rem;line-height:1;text-transform:uppercase;letter-spacing:.02em}
+.logo-sub{display:block;font-family:var(--body);font-size:.6875rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);line-height:1.2}
+.nav{display:flex;gap:20px;flex-wrap:wrap}
+.nav a{color:var(--fg);text-decoration:none;font-weight:500;font-size:.9375rem}
+.nav a:hover{color:var(--accent-text)}
+.top-right{display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap}
+.phone{font-weight:600;font-variant-numeric:tabular-nums;user-select:all;white-space:nowrap}
+.btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;border:1px solid var(--accent);background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;text-decoration:none;text-align:center;line-height:1.2}
+.btn:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+.btn.ghost{background:transparent;color:var(--accent-text);border-color:var(--accent-text)}
+.btn.ghost:hover{background:var(--soft)}
+.btn.sm{padding:8px 16px;font-size:.9375rem}
+.btn.link{border:0;background:none;color:var(--blue-text);padding:0;font-weight:500;border-radius:4px}
+.btn.link:hover{background:none;text-decoration:underline}
+
+/* первый экран */
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:32px 48px;align-items:center;padding-top:40px}
+.hero-text{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero h1 em{font-style:normal;color:var(--accent-text)}
+.lead{font-size:1.125rem;max-width:46ch;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.facts{display:flex;flex-wrap:wrap;gap:12px 32px;margin:6px 0 0;padding:18px 0 0;border-top:1px solid var(--line)}
+.facts div{display:flex;flex-direction:column;gap:2px}
+.facts dt{font-size:2.25rem;line-height:1;color:var(--blue-text)}
+.facts dd{margin:0;font-size:.875rem;color:var(--muted)}
+.try{background:var(--soft);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0;position:relative;overflow:hidden}
+.try svg.bag{width:100%;max-width:300px;height:auto;align-self:center;position:relative}
+.arc{position:absolute;right:-70px;top:-50px;width:300px;height:420px;pointer-events:none}
+.try-ctl{display:flex;flex-direction:column;gap:10px;position:relative}
+.try-ctl label.lbl{display:flex;flex-direction:column;gap:4px;font-size:.875rem;color:var(--muted)}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sw{position:relative;display:block}
+.sw input{position:absolute;opacity:0;pointer-events:none}
+.sw span{display:flex;align-items:center;gap:6px;padding:6px 12px 6px 6px;border:1px solid var(--line);border-radius:999px;background:var(--surface);cursor:pointer;font-size:.875rem}
+.sw i{width:20px;height:20px;border-radius:50%;border:1px solid var(--line);display:block}
+.sw input:checked + span{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text)}
+.sw input:focus-visible + span{outline:2px solid var(--blue);outline-offset:2px}
+
+/* секции */
+.sec{display:flex;flex-direction:column;gap:20px;scroll-margin-top:84px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px}
+.group{display:flex;flex-direction:column;gap:10px}
+.group-name{font-size:.8125rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--blue-text)}
+
+/* каталог */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(164px,1fr));gap:10px}
+.tiles.big{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.tile{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:12px;cursor:pointer;min-width:0}
+.tile:hover{border-color:var(--accent-text)}
+.tile[aria-pressed="true"]{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text);background:var(--soft)}
+.tile-name{font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.tiles.big .tile{padding:18px;gap:6px}
+.tiles.big .tile-name{font-family:var(--display);font-weight:800;font-size:1.625rem;text-transform:uppercase;line-height:1}
+.tile-hint{font-size:.8125rem;color:var(--muted);flex:1}
+.tile-price{font-size:.8125rem;font-variant-numeric:tabular-nums}
+.tiles.big .tile-price{font-size:.9375rem;color:var(--accent-text);font-weight:600}
+
+/* расчёт */
+.calc{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:28px;align-items:start}
+.form{display:flex;flex-direction:column;gap:20px;min-width:0}
+.field{display:flex;flex-direction:column;gap:8px;border:0;padding:0;margin:0;min-width:0}
+.field > legend,.label{font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0;margin-bottom:8px}
+.field > .label{margin-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative;display:block}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span,.preset{display:block;padding:8px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer;line-height:1.3}
+.chip span:hover,.preset:hover{border-color:var(--accent-text)}
+.chip input:checked + span,.preset[aria-pressed="true"]{border-color:var(--accent-text);box-shadow:inset 0 0 0 1px var(--accent-text);background:var(--soft)}
+.chip input:focus-visible + span{outline:2px solid var(--blue);outline-offset:2px}
+.preset{font-variant-numeric:tabular-nums}
+.qty-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.inp{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);width:100%;min-width:0}
+.inp.short{width:7.5rem;font-variant-numeric:tabular-nums}
+textarea.inp{resize:vertical;min-height:6rem}
+
+.result{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.result dl{margin:0;display:flex;flex-direction:column;gap:6px;font-size:.875rem}
+.result dl div{display:flex;justify-content:space-between;gap:12px}
+.result dt{color:var(--muted);flex:none}
+.result dd{margin:0;text-align:right;min-width:0;overflow-wrap:anywhere}
+.price{font-size:2.75rem;line-height:1;border-top:1px solid var(--line);padding-top:16px;color:var(--accent-text)}
+.note{background:var(--warn-bg);color:var(--warn);padding:10px 12px;border-radius:10px;font-size:.875rem}
+.added{color:var(--ok);font-size:.875rem}
+.added a{color:inherit}
+
+/* заявка */
+.order{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.positions{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.pos{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.pos-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.pos-top strong{min-width:0}
+.pos-specs{font-size:.8125rem;color:var(--muted);overflow-wrap:anywhere}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:18px;color:var(--muted)}
+.total{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.total .fig{font-size:1.75rem;line-height:1;color:var(--accent-text)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.grid2 label,.col > label{display:flex;flex-direction:column;gap:4px;font-size:.875rem;color:var(--muted)}
+#order-text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.8125rem;line-height:1.5;min-height:15rem}
+.send{display:flex;flex-wrap:wrap;gap:8px}
+.status{font-size:.875rem;min-height:1.3em}
+.status.err{color:var(--err)}
+.status.ok{color:var(--ok)}
+.reach{display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line);padding-top:14px}
+.reach div{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.reach b{user-select:all;font-variant-numeric:tabular-nums}
+
+/* отделка, порядок, контакты */
+.finish{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px 32px;margin:0}
+.finish div{display:flex;flex-direction:column;gap:6px;border-top:3px solid var(--blue);padding-top:12px}
+.finish dt{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;line-height:1}
+.finish dd{margin:0;color:var(--muted);font-size:.9375rem}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 48px}
+.two ul,.two ol{margin:0;padding-left:1.25rem;display:flex;flex-direction:column;gap:6px;max-width:58ch}
+.contacts{background:var(--soft);border-radius:20px;padding:28px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 48px}
+.contacts dl{margin:0;display:flex;flex-direction:column;gap:12px}
+.contacts dt{font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.contacts dd{margin:0}
+footer{color:var(--muted);font-size:.875rem;border-top:1px solid var(--line);padding-top:16px}
+
+@media (max-width:860px){
+  .hero,.calc,.order,.two,.contacts{grid-template-columns:minmax(0,1fr)}
+  .result{position:static}
+  .nav{display:none}
+  .page{gap:48px}
+  .hero{padding-top:24px}
+}
+@media (max-width:460px){
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .logo-sub{display:none}
+  .price{font-size:2.25rem}
+  .contacts{padding:20px}
+}
+</style>
+
+<div class="proto">Прототип нового сайта «Альт Пос». Цены на пакеты и календари взяты с действующего сайта, на цифровую печать пока условные.</div>
+
+<header class="top">
+  <div class="top-in">
+    <a class="logo" href="#top" aria-label="Альт Пос, на главную">
+      <svg viewBox="0 0 60 60" aria-hidden="true">
+        <path fill="var(--logo-a)" d="M18 2C28 13 29 30 4 56C22 49 35 35 33 20C31 12 26 6 18 2Z"/>
+        <path fill="var(--blue)" d="M25 5C41 14 50 36 44 58C43 40 36 21 25 5Z"/>
+        <path fill="var(--logo-b)" d="M15 42C30 37 45 29 59 19C48 31 36 40 23 46Z"/>
+      </svg>
+      <span><span class="logo-word">Альт Пос</span><span class="logo-sub">печать и упаковка</span></span>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#catalog">Продукция</a>
+      <a href="#calc">Расчёт</a>
+      <a href="#how">Как заказать</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="top-right">
+      <span class="phone" id="shop-phone"></span>
+      <a class="btn sm" href="#order" id="cart-link">Заявка</a>
+    </div>
+  </div>
+</header>
+
+<div class="page" id="top">
+
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Пакеты, календари и печать <em>с вашим логотипом</em></h1>
+      <p class="lead">Рекламно-производственная компания полного цикла в Москве. Посчитайте цену на сайте, а точные условия подтвердит менеджер.</p>
+      <div class="cta">
+        <a class="btn" href="#calc">Рассчитать стоимость</a>
+        <a class="btn ghost" href="#catalog">Смотреть продукцию</a>
+      </div>
+      <dl class="facts">
+        <div><dt class="fig">11 лет</dt><dd>печатаем и производим</dd></div>
+        <div><dt class="fig">2 500+</dt><dd>клиентов</dd></div>
+        <div><dt class="fig">34</dt><dd>контракта с крупными компаниями</dd></div>
+      </dl>
+    </div>
+
+    <div class="try">
+      <svg class="arc" viewBox="0 0 300 420" aria-hidden="true"><path fill="var(--blue)" opacity=".16" d="M40 0C220 60 320 250 250 420C250 270 180 110 40 0Z"/></svg>
+      <svg class="bag" id="bag" viewBox="0 0 300 330" role="img" aria-label="Пакет с вашей надписью">
+        <ellipse cx="160" cy="316" rx="112" ry="9" fill="var(--fg)" opacity=".12"/>
+        <path d="M112 84C112 22 196 22 196 84" fill="none" stroke="var(--bag-side)" stroke-width="5" stroke-linecap="round"/>
+        <polygon points="232,84 262,98 262,300 232,312" fill="var(--bag-side)" stroke="var(--line)"/>
+        <rect x="72" y="84" width="160" height="228" fill="var(--bag)" stroke="var(--line)"/>
+        <path d="M104 96C104 34 188 34 188 96" fill="none" stroke="var(--bag-rope)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="104" cy="98" r="4" fill="var(--bag-rope)"/><circle cx="188" cy="98" r="4" fill="var(--bag-rope)"/>
+        <text id="bag-label" x="152" y="212" text-anchor="middle" dominant-baseline="middle" fill="var(--bag-ink)" font-family="Sofia Sans Extra Condensed, Arial Narrow, sans-serif" font-weight="800" font-size="30">ВАШ ЛОГОТИП</text>
+      </svg>
+      <div class="try-ctl">
+        <label class="lbl" for="bag-text">Напишите название компании и посмотрите его на пакете
+          <input class="inp" id="bag-text" maxlength="18" value="Ваш логотип" autocomplete="off">
+        </label>
+        <div class="swatches" id="bag-colors"></div>
+        <button class="btn ghost" type="button" id="bag-calc">Посчитать такой пакет</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="catalog">
+    <div class="sec-head">
+      <h2>Продукция</h2>
+      <p class="muted">Выберите, что нужно, и сразу увидите расчёт</p>
+    </div>
+    <div id="groups" class="col" style="gap:24px"></div>
+  </section>
+
+  <section class="sec" id="calc">
+    <div class="sec-head">
+      <h2>Расчёт: <span id="calc-name"></span></h2>
+      <p class="muted" id="calc-hint"></p>
+    </div>
+    <div class="calc">
+      <form class="form" id="form" novalidate></form>
+      <aside class="result" id="result" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <section class="sec" id="order">
+    <div class="sec-head">
+      <h2>Заявка</h2>
+      <p class="muted">Менеджер проверит детали и назовёт точную цену и срок</p>
+    </div>
+    <div class="order">
+      <div class="col">
+        <ul class="positions" id="positions"></ul>
+        <div class="total" id="total" hidden>
+          <span>Ориентир по заявке</span>
+          <span class="fig" id="total-sum"></span>
+        </div>
+        <div class="grid2">
+          <label>Имя или компания
+            <input class="inp" id="c-name" autocomplete="name">
+          </label>
+          <label>Телефон или ник в мессенджере
+            <input class="inp" id="c-contact" autocomplete="tel">
+          </label>
+          <label>Как удобнее связаться
+            <select class="inp" id="c-way">
+              <option>Звонок</option>
+              <option>Telegram</option>
+              <option>MAX</option>
+              <option>Почта</option>
+            </select>
+          </label>
+          <label>Получение
+            <select class="inp" id="c-delivery">
+              <option>Самовывоз, Сигнальный проезд</option>
+              <option>Доставка по Москве</option>
+              <option>Отправка в регион транспортной компанией</option>
+            </select>
+          </label>
+        </div>
+        <label>Комментарий
+          <textarea class="inp" id="c-comment" placeholder="Сроки, пожелания по материалам, адрес доставки"></textarea>
+        </label>
+      </div>
+
+      <div class="col">
+        <label>Текст заявки для менеджера
+          <textarea class="inp" id="order-text" readonly></textarea>
+        </label>
+        <div class="send">
+          <button class="btn" type="button" id="b-copy">Скопировать заявку</button>
+          <span id="tg-slot"></span>
+          <span id="max-slot"></span>
+        </div>
+        <p class="status" id="status" role="status"></p>
+        <div class="reach">
+          <div><span class="muted">Позвонить:</span> <b id="call-phone"></b> <button class="btn link" type="button" data-copy="phone">Скопировать</button></div>
+          <div><span class="muted">Написать на почту:</span> <b id="call-mail"></b> <button class="btn link" type="button" data-copy="email">Скопировать</button></div>
+        </div>
+        <p class="muted small">Макет приложите к письму или отправьте в чат с менеджером. Требования к файлам ниже.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="finishing">
+    <div class="sec-head">
+      <h2>Отделка</h2>
+      <p class="muted">Добавляется к пакетам, папкам, грамотам и пригласительным</p>
+    </div>
+    <dl class="finish">
+      <div><dt>Тиснение</dt><dd>Фольга по контуру логотипа. Выделяет знак и сразу делает изделие дороже на вид.</dd></div>
+      <div><dt>Конгрев</dt><dd>Рельефное выдавливание: логотип можно почувствовать пальцами.</dd></div>
+      <div><dt>Выборочный лак</dt><dd>Глянцевый лак на отдельных элементах матового макета.</dd></div>
+      <div><dt>Шелкография</dt><dd>Печать через трафарет. Плотные, яркие цвета на бумаге и полиэтилене.</dd></div>
+    </dl>
+  </section>
+
+  <section class="two sec" id="how">
+    <div class="col">
+      <h2>Как заказать</h2>
+      <ol>
+        <li>Считаете ориентир на сайте и отправляете заявку.</li>
+        <li>Менеджер уточняет детали и делает точный расчёт.</li>
+        <li>Согласуем цену и макет.</li>
+        <li>Вы оплачиваете заказ.</li>
+        <li>Печатаем и собираем тираж.</li>
+        <li>Забираете заказ или получаете доставкой по Москве и в регионы.</li>
+      </ol>
+      <p class="muted small">Цветопроба перед тиражом от 500 ₽.</p>
+    </div>
+    <div class="col">
+      <h2>Требования к макету</h2>
+      <ul>
+        <li>Файл PDF или TIFF. Принимаем также AI, CDR, INDD.</li>
+        <li>Цветовая модель CMYK. Для шелкографии цвета по Pantone.</li>
+        <li>Разрешение 300 dpi в масштабе 1:1.</li>
+        <li>Вылеты под обрез по 3 мм с каждой стороны.</li>
+        <li>Текст и логотипы не ближе 4 мм к линии реза.</li>
+        <li>Шрифты переведены в кривые.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="contacts">
+    <h2>Контакты</h2>
+    <div class="contacts">
+      <dl>
+        <div><dt>Адрес</dt><dd id="k-address"></dd><dd class="muted small">Метро Владыкино. Перед визитом закажите пропуск.</dd></div>
+        <div><dt>Часы работы</dt><dd id="k-hours"></dd></div>
+        <div><dd><a class="btn ghost sm" id="k-map" target="_blank" rel="noopener">Открыть на Яндекс Картах</a></dd></div>
+      </dl>
+      <dl>
+        <div><dt>Телефон</dt><dd class="fig" style="font-size:2.25rem;line-height:1.1;user-select:all" id="k-phone"></dd></div>
+        <div><dt>Почта</dt><dd style="user-select:all" id="k-mail"></dd></div>
+        <div><dt>Доставка</dt><dd>По Москве и в регионы транспортными компаниями</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+/* ===== Настройки компании: меняются в одном месте ===== */
+const SHOP = {
+  name: 'Альт Пос',
+  phone: '+7 (495) 777-88-53',
+  email: 'zakaz@alt-pos.ru',
+  telegram: '',            // ник менеджера без @
+  max: '',                 // ссылка на профиль менеджера в MAX
+  hours: 'Пн–Пт, 10:00–19:00',
+  address: 'Москва, Сигнальный проезд, 19, 2-я проходная',
+  map: 'https://yandex.ru/maps/-/CXqdBS0L'
+};
+
+/* ===== Прайс =====
+   type:'table'  — цена за штуку из прайса: tiers = [[тираж, цена], ...]; между тиражами цена сглаживается.
+   без type      — условная формула: base — цена за штуку при тираже ref; k умножает, add прибавляет рубли.
+   type:'custom' — без расчёта, по запросу. */
+const GROUPS = [
+  { id:'bags', name:'Пакеты и календари, цены по прайсу', big:true },
+  { id:'digital', name:'Цифровая печать' }
+];
+const PRODUCTS = [
+  { id:'paper-bag', group:'bags', name:'Бумажные пакеты', hint:'с печатью логотипа, ручки-шнурки', type:'table',
+    qtys:[100,200,500,1000,3000], defQty:500,
+    extras:['Тиснение','Конгрев','Выборочный лак'],
+    params:[
+      {id:'size', label:'Размер, см', def:2, options:[
+        {t:'10×30×10', tiers:[[100,160],[200,95],[500,56],[1000,41]]},
+        {t:'25×35×9',  tiers:[[100,165],[200,110],[500,63],[1000,47]]},
+        {t:'30×40×11', tiers:[[100,180],[200,120],[500,73],[1000,59]]},
+        {t:'40×50×12', tiers:[[100,220],[200,147],[500,98],[1000,85]]}
+      ]}
+    ]},
+  { id:'pe-bag', group:'bags', name:'Пакеты ПВД', hint:'полиэтиленовые, шелкография', type:'table',
+    qtys:[100,200,300,500,1000,3000,5000], defQty:1000,
+    params:[
+      {id:'colors', label:'Цветов в печати', options:[
+        {t:'1 цвет',  tiers:[[100,42],[200,31],[300,27],[500,18],[1000,15],[3000,14],[5000,12]]},
+        {t:'2 цвета', tiers:[[100,55],[200,41],[300,35],[500,25],[1000,20],[3000,19],[5000,18]]},
+        {t:'3 цвета', tiers:[[100,79],[200,57],[300,50],[500,35],[1000,27],[3000,26],[5000,25]]},
+        {t:'4 цвета', tiers:[[100,92],[200,70],[300,61],[500,44],[1000,34],[3000,33],[5000,32]]}
+      ]},
+      {id:'size', label:'Размер, см', def:2, options:[{t:'20×30',add:-1},{t:'30×40',add:-1},{t:'40×50'},{t:'50×60',k:1.2},{t:'70×60',k:1.2}]},
+      {id:'thick', label:'Толщина', options:[{t:'50 мкм'},{t:'70 мкм',add:2},{t:'80 мкм',add:2}]},
+      {id:'bagcolor', label:'Цвет пакета', options:[{t:'Белый'},{t:'Цветной',add:2}]},
+      {id:'ink', label:'Краска', options:[{t:'Обычная'},{t:'Золото или серебро',k:1.1}]},
+      {id:'art', label:'Рисунок', options:[{t:'Штриховой: текст и линии'},{t:'С плашкой или растром',k:1.15}]}
+    ]},
+  { id:'cal-quarter', group:'bags', name:'Календарь квартальный', hint:'постер А4, 3 пружины, 3 блока', type:'table',
+    tiers:[[10,420],[50,208],[100,184],[200,144]], qtys:[10,50,100,200], defQty:100,
+    params:[
+      {id:'fields', label:'Реклама на полях под блоками', options:[{t:'На одном поле'},{t:'На трёх полях'}]}
+    ]},
+  { id:'cal-flip', group:'bags', name:'Календарь перекидной', hint:'А3, пружина и ригель', type:'table',
+    tiers:[[1,1300],[5,1300],[10,400],[50,340],[100,280]], qtys:[1,5,10,50,100], defQty:50,
+    params:[
+      {id:'sheets', label:'Листы', options:[{t:'12 односторонних'},{t:'6 двусторонних'}]},
+      {id:'spring', label:'Пружина', options:[{t:'По узкой стороне'},{t:'По широкой стороне'}]}
+    ]},
+  { id:'cal-poster', group:'bags', name:'Календарь плакатный', hint:'один лист с сеткой, от А4', type:'table',
+    tiers:[[50,100],[200,85],[500,70]], qtys:[50,200,500,1000], defQty:200,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'А4, 210×297 мм'},{t:'А3, 297×420 мм'},{t:'310×400 мм'}]}
+    ],
+    warn(o, s){ return s.qty >= 1000 ? 'От 1000 штук цена ниже прайса, её назовёт менеджер.' : ''; }},
+
+  { id:'vizitki', group:'digital', name:'Визитки', hint:'90×50, картон 300 г', base:6, ref:100, exp:.35, floor:.22, min:500,
+    qtys:[50,100,200,500,1000], defQty:500,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'90×50 мм'},{t:'85×55 мм, евро',k:1.05}]},
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 300 г'},{t:'Мелованная 350 г',k:1.12},{t:'Дизайнерская: лён, Touch Cover',k:1.7}]},
+      {id:'color', label:'Печать', def:1, options:[{t:'4+0, с одной стороны'},{t:'4+4, с двух сторон',k:1.25}]},
+      {id:'finish', label:'Отделка', options:[{t:'Без отделки'},{t:'Матовая ламинация',add:1.5},{t:'Soft-touch',add:2.5},{t:'Скругление углов',add:1}]}
+    ]},
+  { id:'listovki', group:'digital', name:'Листовки', hint:'от А7 до А3', base:12, ref:100, exp:.45, floor:.13, min:700,
+    qtys:[50,100,300,500,1000,3000], defQty:500,
+    params:[
+      {id:'format', label:'Формат', def:2, options:[{t:'А7',k:.4},{t:'А6',k:.6},{t:'А5'},{t:'Евро 99×210',k:.8},{t:'А4',k:1.8},{t:'А3',k:3.4}]},
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 130 г'},{t:'Мелованная 170 г',k:1.15},{t:'Мелованная 250 г',k:1.4},{t:'Картон 300 г',k:1.55}]},
+      {id:'color', label:'Печать', options:[{t:'4+0, с одной стороны'},{t:'4+4, с двух сторон',k:1.3}]}
+    ]},
+  { id:'buklety', group:'digital', name:'Буклеты', hint:'с фальцовкой', base:30, ref:100, exp:.45, floor:.14, min:2000,
+    qtys:[50,100,300,500,1000], defQty:300,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'А4 в евро, 2 фальца'},{t:'А4 в А5, 1 фальц',k:.97},{t:'А3 в А4, 1 фальц',k:1.9}]},
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 130 г'},{t:'Мелованная 170 г',k:1.15},{t:'250 г с биговкой',k:1.45}]}
+    ]},
+  { id:'broshury', group:'digital', name:'Брошюры', hint:'скрепка, пружина, клей', base:70, ref:100, exp:.35, floor:.3, min:3000,
+    qtys:[50,100,300,500,1000], defQty:100,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'А5'},{t:'А4',k:1.8}]},
+      {id:'pages', label:'Полос вместе с обложкой', def:2, options:[{t:'8',n:8},{t:'12',n:12,k:1.4},{t:'16',n:16,k:1.75},{t:'24',n:24,k:2.5},{t:'32',n:32,k:3.2},{t:'48',n:48,k:4.6},{t:'64',n:64,k:6}]},
+      {id:'cover', label:'Обложка', options:[{t:'Как блок, 130 г'},{t:'Плотная 300 г',add:12},{t:'300 г с ламинацией',add:22}]},
+      {id:'bind', label:'Переплёт', options:[{t:'Скрепка'},{t:'Пружина',add:35},{t:'Клеевой',add:45,kbs:true}]}
+    ],
+    warn(o){ return o.bind.kbs && o.pages.n < 32 ? 'Клеевой переплёт делают от 32 полос. Для такого объёма подойдёт скрепка или пружина.' : ''; }},
+  { id:'postery', group:'digital', name:'Постеры', hint:'А3–А0, от 1 штуки', base:120, ref:1, exp:.3, floor:.11, min:300,
+    qtys:[1,5,10,50,100], defQty:10,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'А3'},{t:'А2',k:2.5},{t:'А1',k:5},{t:'А0',k:9.5}]},
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 150 г'},{t:'Мелованная 200 г',k:1.2},{t:'Фотобумага сатин',k:1.6}]}
+    ]},
+  { id:'nakleyki', group:'digital', name:'Наклейки', hint:'бумага и плёнка', base:9, ref:100, exp:.42, floor:.14, min:700,
+    qtys:[50,100,300,500,1000,3000], defQty:500,
+    params:[
+      {id:'size', label:'Размер', options:[{t:'до 50×50 мм'},{t:'до 100×70 мм',k:1.8},{t:'до А6',k:2.3},{t:'до А5',k:3.8}]},
+      {id:'material', label:'Материал', options:[{t:'Бумажная самоклейка'},{t:'Белая плёнка',k:1.35},{t:'Прозрачная плёнка',k:1.5}]},
+      {id:'cut', label:'Резка', options:[{t:'Прямоугольная'},{t:'Фигурная, по контуру',add:3}]}
+    ]},
+  { id:'konverty', group:'digital', name:'Конверты', hint:'Е65, С5, С4', base:22, ref:100, exp:.4, floor:.2, min:1200,
+    qtys:[50,100,300,500,1000], defQty:300,
+    params:[
+      {id:'format', label:'Формат', options:[{t:'Е65, 110×220'},{t:'С5, 162×229',k:1.25},{t:'С4, 229×324',k:1.7}]},
+      {id:'color', label:'Печать', def:1, options:[{t:'1+0, одна краска',k:.7},{t:'4+0, цветная'}]},
+      {id:'window', label:'Окно', options:[{t:'Без окна'},{t:'С окном',add:1.5}]}
+    ]},
+  { id:'bloknoty', group:'digital', name:'Блокноты', hint:'пружина или клей', base:180, ref:50, exp:.3, floor:.35, min:2500,
+    qtys:[10,50,100,300,500], defQty:50,
+    params:[
+      {id:'format', label:'Формат', def:1, options:[{t:'А6',k:.7},{t:'А5'},{t:'А4',k:1.7}]},
+      {id:'sheets', label:'Листов', options:[{t:'40'},{t:'60',k:1.25},{t:'80',k:1.5}]},
+      {id:'block', label:'Блок', options:[{t:'Клетка или линейка, 1+0'},{t:'С логотипом, 4+0',k:1.35}]},
+      {id:'bind', label:'Крепление', options:[{t:'Пружина'},{t:'Клей, отрывной',k:.8}]}
+    ]},
+  { id:'papki', group:'digital', name:'Папки', hint:'А4 с карманом', base:170, ref:50, exp:.35, floor:.3, min:2500,
+    qtys:[10,50,100,300,500], defQty:100, extras:['Тиснение','Конгрев','Выборочный лак'],
+    params:[
+      {id:'color', label:'Печать', options:[{t:'4+0, снаружи'},{t:'4+4, снаружи и внутри',k:1.2}]},
+      {id:'lam', label:'Ламинация', options:[{t:'Без ламинации'},{t:'Матовая',add:15},{t:'Soft-touch',add:25}]}
+    ]},
+  { id:'priglasheniya', group:'digital', name:'Пригласительные', hint:'от 10 штук', base:35, ref:50, exp:.35, floor:.3, min:900,
+    qtys:[10,30,50,100,300], defQty:50, extras:['Тиснение','Конгрев'],
+    params:[
+      {id:'format', label:'Формат', options:[{t:'Евро 100×210'},{t:'А6',k:.8},{t:'А5 со сгибом',k:1.5}]},
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 300 г'},{t:'Дизайнерская',k:1.6}]}
+    ]},
+  { id:'gramoty', group:'digital', name:'Грамоты', hint:'А4, от 10 штук', base:45, ref:10, exp:.3, floor:.35, min:450,
+    qtys:[10,30,50,100,300], defQty:30, extras:['Тиснение','Конгрев'],
+    params:[
+      {id:'paper', label:'Бумага', options:[{t:'Мелованная 250 г'},{t:'Дизайнерская',k:1.5}]}
+    ]},
+  { id:'beydzhi', group:'digital', name:'Бейджи', hint:'с лентой или зажимом', base:40, ref:10, exp:.25, floor:.4, min:400,
+    qtys:[10,30,50,100,300], defQty:50,
+    params:[
+      {id:'type', label:'Вид', options:[{t:'Вкладыш в прозрачном кармане'},{t:'Пластиковый с печатью',k:2.2}]},
+      {id:'hold', label:'Крепление', options:[{t:'Зажим с булавкой'},{t:'Лента',add:15},{t:'Лента с логотипом',add:45}]}
+    ]},
+  { id:'drugoe', group:'digital', name:'Другой заказ', hint:'коробки, сувениры, нестандарт', type:'custom', params:[] }
+];
+
+const LAYOUTS = ['Макет готов','Нужна доработка','Нужен дизайн'];
+const TERMS = ['Не срочно','Срочно'];
+
+/* ===== Утилиты ===== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt = n => new Intl.NumberFormat('ru-RU').format(n).replace(/ | /g,' ');
+function nice(n, up){
+  const step = n < 1000 ? 10 : n < 10000 ? 50 : n < 100000 ? 100 : 500;
+  return (up ? Math.ceil : Math.floor)(n/step)*step;
+}
+const priceLabel = c => !c.priced ? 'по запросу' : c.lo === c.hi ? '≈ ' + fmt(c.lo) + ' ₽' : fmt(c.lo) + ' – ' + fmt(c.hi) + ' ₽';
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const minQty = p => p.qtys ? p.qtys[0] : 1;
+
+/* ===== Расчёт ===== */
+function interp(tiers, qty){
+  if (qty <= tiers[0][0]) return tiers[0][1];
+  const last = tiers[tiers.length - 1];
+  if (qty >= last[0]) return last[1];
+  for (let i = 1; i < tiers.length; i++){
+    const [q1, p1] = tiers[i - 1], [q2, p2] = tiers[i];
+    if (qty <= q2){
+      const t = (Math.log(qty) - Math.log(q1)) / (Math.log(q2) - Math.log(q1));
+      return Math.exp(Math.log(p1) + t * (Math.log(p2) - Math.log(p1)));
+    }
+  }
+}
+function volumeK(p, qty){ return clamp(Math.pow(qty / p.ref, -p.exp), p.floor, 1.6); }
+function calc(p, s){
+  if (p.type === 'custom'){
+    const text = (s.text || '').trim();
+    return { priced:false, ready:!!text, qtyLabel:'по запросу', specs:[text || 'Описание не заполнено', 'Макет: ' + LAYOUTS[s.layout]], warn:'', extras:false };
+  }
+  let k = 1, add = 0, tiers = p.tiers || null; const specs = [], chosen = {};
+  p.params.forEach(par => {
+    const o = par.options[s.values[par.id] ?? 0];
+    chosen[par.id] = o;
+    k *= o.k ?? 1; add += o.add ?? 0;
+    if (o.tiers) tiers = o.tiers;
+    specs.push(par.label + ': ' + o.t);
+  });
+  const ex = (p.extras || []).filter((_, i) => s.extras.includes(i));
+  if (ex.length) specs.push('Отделка: ' + ex.join(', ').toLowerCase());
+  specs.push('Срок: ' + TERMS[s.urgent], 'Макет: ' + LAYOUTS[s.layout]);
+  let unit, lo, hi;
+  if (p.type === 'table'){
+    unit = (interp(tiers, s.qty) + add) * k;
+    lo = hi = Math.round(unit * s.qty / 10) * 10;
+  } else {
+    const total = Math.max(p.min || 0, (p.base * k + add) * volumeK(p, s.qty) * s.qty);
+    unit = total / s.qty; lo = nice(total * .9, false); hi = nice(total * 1.15, true);
+  }
+  return { priced:true, ready:true, exact:p.type === 'table', lo, hi, unit, extras:ex.length > 0,
+           qtyLabel: fmt(s.qty) + ' шт', specs, warn: p.warn ? p.warn(chosen, s) : '' };
+}
+
+/* ===== Состояние ===== */
+const state = { pid:'paper-bag' };
+let cart = [];
+const byId = id => PRODUCTS.find(p => p.id === id);
+function defaults(p){
+  const values = {};
+  p.params.forEach(par => values[par.id] = par.def ?? 0);
+  return { values, qty: p.defQty ?? 0, urgent:0, layout:0, text:'', extras:[] };
+}
+let cur = defaults(byId(state.pid));
+const KEY = 'altpos-order';
+function load(){
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (raw && Array.isArray(raw.cart)) cart = raw.cart;
+    if (raw && raw.contact) ['c-name','c-contact','c-comment'].forEach(id => { if (raw.contact[id]) $(id).value = raw.contact[id]; });
+  } catch(e){}
+}
+function save(){
+  try {
+    localStorage.setItem(KEY, JSON.stringify({ cart,
+      contact:{ 'c-name':$('c-name').value, 'c-contact':$('c-contact').value, 'c-comment':$('c-comment').value } }));
+  } catch(e){}
+}
+
+/* ===== Каталог ===== */
+function tilePrice(p){
+  if (p.type === 'custom') return 'цена по запросу';
+  if (p.type === 'table'){
+    const all = p.tiers ? [p.tiers] : p.params.flatMap(par => par.options.filter(o => o.tiers).map(o => o.tiers));
+    const low = Math.min(...all.map(t => t[t.length - 1][1]));
+    return 'от ' + fmt(minQty(p)) + ' шт · от ' + fmt(low) + ' ₽/шт';
+  }
+  return 'от ' + fmt(minQty(p)) + ' шт';
+}
+function renderTiles(){
+  $('groups').innerHTML = GROUPS.map(g => `<div class="group"><h3 class="group-name">${esc(g.name)}</h3><div class="tiles${g.big ? ' big' : ''}">` +
+    PRODUCTS.filter(p => p.group === g.id).map(p =>
+      `<button type="button" class="tile" data-pid="${p.id}" aria-pressed="${p.id === state.pid}">
+        <span class="tile-name">${esc(p.name)}</span>
+        <span class="tile-hint">${esc(p.hint)}</span>
+        <span class="tile-price">${tilePrice(p)}</span></button>`).join('') + `</div></div>`).join('');
+}
+function selectProduct(pid, scroll){
+  state.pid = pid; cur = defaults(byId(pid));
+  renderTiles(); renderForm(); renderResult();
+  if (scroll) $('calc').scrollIntoView({ block:'start' });
+}
+$('groups').addEventListener('click', e => {
+  const t = e.target.closest('.tile'); if (t) selectProduct(t.dataset.pid, true);
+});
+
+/* ===== Форма расчёта ===== */
+function chips(name, options, checked, type){
+  return `<div class="chips">` + options.map((t, i) =>
+    `<label class="chip"><input type="${type || 'radio'}" name="${name}" id="${name}-${i}" value="${i}"${(Array.isArray(checked) ? checked.includes(i) : i === checked) ? ' checked' : ''}><span>${esc(t)}</span></label>`
+  ).join('') + `</div>`;
+}
+function renderForm(){
+  const p = byId(state.pid);
+  $('calc-name').textContent = p.name;
+  $('calc-hint').textContent = p.type === 'custom' ? 'Опишите задачу, менеджер посчитает вручную'
+    : p.type === 'table' ? 'Цена по действующему прайсу' : 'Цена условная, для примера';
+  let h = '';
+  if (p.type === 'custom'){
+    h += `<div class="field"><label class="label" for="f-text">Что нужно изготовить</label>
+      <textarea class="inp" id="f-text" placeholder="Например: коробки 200×150×80 мм из картона, 500 штук, печать в 2 цвета">${esc(cur.text)}</textarea></div>`;
+  } else {
+    h += `<div class="field"><label class="label" for="f-qty">Тираж, шт</label><div class="qty-row">` +
+      p.qtys.map(q => `<button type="button" class="preset" data-qty="${q}" aria-pressed="${q === cur.qty}">${fmt(q)}</button>`).join('') +
+      `<input class="inp short" id="f-qty" type="number" min="${minQty(p)}" max="100000" step="1" value="${cur.qty}" aria-label="Свой тираж"></div></div>`;
+  }
+  p.params.forEach(par => {
+    h += `<fieldset class="field"><legend>${esc(par.label)}</legend>${chips('p-' + par.id, par.options.map(o => o.t), cur.values[par.id])}</fieldset>`;
+  });
+  if (p.extras) h += `<fieldset class="field"><legend>Отделка, по желанию</legend>${chips('f-extra', p.extras, cur.extras, 'checkbox')}</fieldset>`;
+  if (p.type !== 'custom') h += `<fieldset class="field"><legend>Срок</legend>${chips('f-urgent', TERMS, cur.urgent)}</fieldset>`;
+  h += `<fieldset class="field"><legend>Макет</legend>${chips('f-layout', LAYOUTS, cur.layout)}</fieldset>`;
+  $('form').innerHTML = h;
+}
+function readForm(){
+  const p = byId(state.pid), f = $('form');
+  const radio = name => { const r = f.querySelector(`input[name="${name}"]:checked`); return r ? +r.value : 0; };
+  p.params.forEach(par => cur.values[par.id] = radio('p-' + par.id));
+  cur.urgent = radio('f-urgent'); cur.layout = radio('f-layout');
+  cur.extras = [...f.querySelectorAll('input[name="f-extra"]:checked')].map(i => +i.value);
+  if (p.type === 'custom') cur.text = $('f-text').value;
+  else {
+    cur.qty = clamp(parseInt($('f-qty').value) || minQty(p), minQty(p), 100000);
+    f.querySelectorAll('.preset').forEach(b => b.setAttribute('aria-pressed', +b.dataset.qty === cur.qty));
+  }
+}
+$('form').addEventListener('input', () => { readForm(); renderResult(); });
+$('form').addEventListener('change', e => { if (e.target.id === 'f-qty') e.target.value = cur.qty; });
+$('form').addEventListener('click', e => {
+  const b = e.target.closest('.preset'); if (!b) return;
+  $('f-qty').value = b.dataset.qty; readForm(); renderResult();
+});
+$('form').addEventListener('submit', e => e.preventDefault());
+
+/* ===== Итог расчёта ===== */
+let justAdded = false;
+function renderResult(){
+  const p = byId(state.pid), r = calc(p, cur);
+  let h = `<h3>${esc(p.name)}, ${esc(r.qtyLabel)}</h3><dl>` +
+    r.specs.map(s => { const i = s.indexOf(': ');
+      return i < 0 ? `<div><dd style="text-align:left">${esc(s)}</dd></div>`
+                   : `<div><dt>${esc(s.slice(0, i))}</dt><dd>${esc(s.slice(i + 2))}</dd></div>`; }).join('') + `</dl>`;
+  if (r.priced){
+    const u = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: r.unit < 100 ? 2 : 0 }).format(r.unit);
+    h += `<div class="price fig">${priceLabel(r)}</div>`;
+    h += r.exact
+      ? `<p class="muted small">${u} ₽ за штуку по прайсу.${r.extras ? ' Отделку менеджер посчитает отдельно.' : ''} Точную цену и срок назовёт менеджер.</p>`
+      : `<p class="muted small">Примерно ${u} ₽ за штуку. Точную цену назовёт менеджер.</p>
+         <div class="note">Цена условная: прайса на цифровую печать пока нет.</div>`;
+  } else {
+    h += `<div class="price fig">По запросу</div><p class="muted small">Такой заказ менеджер считает вручную.</p>`;
+  }
+  if (r.warn) h += `<div class="note">${esc(r.warn)}</div>`;
+  h += `<button class="btn" type="button" id="b-add">Добавить в заявку</button>`;
+  if (justAdded) h += `<p class="added">Добавлено. <a href="#order">Перейти к заявке</a></p>`;
+  $('result').innerHTML = h;
+  justAdded = false;
+}
+$('result').addEventListener('click', e => {
+  if (e.target.id !== 'b-add') return;
+  const p = byId(state.pid), r = calc(p, cur);
+  if (!r.ready){ $('f-text').focus(); return; }
+  cart.push({ title:p.name, qtyLabel:r.qtyLabel, specs:r.specs, priced:r.priced, lo:r.lo || 0, hi:r.hi || 0 });
+  justAdded = true;
+  renderResult(); renderOrder(); save();
+});
+
+/* ===== Заявка ===== */
+function plural(n){ const a = n % 10, b = n % 100; return a === 1 && b !== 11 ? 'позиция' : a >= 2 && a <= 4 && (b < 12 || b > 14) ? 'позиции' : 'позиций'; }
+function totals(){
+  const lo = cart.reduce((a, c) => a + c.lo, 0), hi = cart.reduce((a, c) => a + c.hi, 0);
+  const extra = cart.some(c => !c.priced);
+  return { hi, label: priceLabel({ priced: hi > 0, lo, hi }) + (hi && extra ? ' + позиции по запросу' : '') };
+}
+function orderText(){
+  const lines = ['Заявка в «' + SHOP.name + '»', ''];
+  cart.forEach((c, i) => {
+    lines.push((i + 1) + '. ' + c.title + ', ' + c.qtyLabel);
+    lines.push('   ' + c.specs.join('; '));
+    lines.push('   Ориентир: ' + priceLabel(c));
+  });
+  const t = totals();
+  if (cart.length > 1 && t.hi) lines.push('', 'Итого ориентир: ' + t.label);
+  lines.push('', 'Имя: ' + ($('c-name').value.trim() || 'не указано'),
+    'Контакт: ' + ($('c-contact').value.trim() || 'не указан'),
+    'Удобнее связаться: ' + $('c-way').value,
+    'Получение: ' + $('c-delivery').value);
+  const cm = $('c-comment').value.trim();
+  if (cm) lines.push('Комментарий: ' + cm);
+  return lines.join('\n');
+}
+function renderOrder(){
+  $('positions').innerHTML = cart.length
+    ? cart.map((c, i) => `<li class="pos"><div class="pos-top"><strong>${esc(c.title)}, ${esc(c.qtyLabel)}</strong>
+        <button type="button" class="btn link small" data-del="${i}">Убрать</button></div>
+        <div class="pos-specs">${esc(c.specs.join('; '))}</div>
+        <div class="tnum">${priceLabel(c)}</div></li>`).join('')
+    : `<li class="empty">Пока пусто. Настройте расчёт выше и нажмите «Добавить в заявку».</li>`;
+  $('total').hidden = !cart.length;
+  $('total-sum').textContent = totals().label;
+  $('cart-link').textContent = cart.length ? 'Заявка: ' + cart.length + ' ' + plural(cart.length) : 'Заявка';
+  $('order-text').value = cart.length ? orderText() : 'Здесь появится текст заявки, когда вы добавите первую позицию.';
+}
+$('positions').addEventListener('click', e => {
+  const b = e.target.closest('[data-del]'); if (!b) return;
+  cart.splice(+b.dataset.del, 1); renderOrder(); save();
+});
+['c-name','c-contact','c-way','c-delivery','c-comment'].forEach(id =>
+  $(id).addEventListener('input', () => { renderOrder(); save(); }));
+
+/* ===== Отправка ===== */
+function setStatus(text, kind){ const s = $('status'); s.textContent = text; s.className = 'status ' + (kind || ''); }
+function valid(){
+  if (!cart.length){ setStatus('Добавьте хотя бы одну позицию из расчёта.', 'err'); return false; }
+  if (!$('c-contact').value.trim()){ setStatus('Укажите телефон или ник, чтобы менеджер мог ответить.', 'err'); $('c-contact').focus(); return false; }
+  return true;
+}
+function copy(text, done, fallbackText){
+  const fallback = () => {
+    if (fallbackText){ setStatus(fallbackText, ''); return; }
+    const t = $('order-text'); t.focus(); t.select(); setStatus('Текст выделен. Скопируйте его вручную.', '');
+  };
+  if (!navigator.clipboard){ fallback(); return; }
+  navigator.clipboard.writeText(text).then(() => setStatus(done, 'ok')).catch(fallback);
+}
+$('b-copy').addEventListener('click', () => { if (valid()) copy(orderText(), 'Заявка скопирована. Вставьте её в письмо или чат с менеджером.'); });
+document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', () => {
+  const v = SHOP[b.dataset.copy];
+  copy(v, b.dataset.copy === 'phone' ? 'Номер скопирован.' : 'Адрес почты скопирован.', v);
+}));
+function messenger(slot, label, href, missing){
+  const el = $(slot);
+  if (href){
+    el.innerHTML = `<a class="btn ghost" target="_blank" rel="noopener">${label}</a>`;
+    const a = el.firstChild;
+    a.href = href('');
+    a.addEventListener('click', e => {
+      if (!valid()){ e.preventDefault(); return; }
+      a.href = href(orderText());
+      copy(orderText(), 'Заявка скопирована, открываем чат. Если текст не подставился, вставьте его.');
+    });
+  } else {
+    el.innerHTML = `<button class="btn ghost" type="button">${label}</button>`;
+    el.firstChild.addEventListener('click', () => { if (valid()) copy(orderText(), missing); });
+  }
+}
+messenger('tg-slot', 'Написать в Telegram',
+  SHOP.telegram ? t => 'https://t.me/' + SHOP.telegram + (t ? '?text=' + encodeURIComponent(t) : '') : null,
+  'Заявка скопирована. Чат в Telegram откроется, когда укажем ник менеджера.');
+messenger('max-slot', 'Написать в MAX',
+  SHOP.max ? () => SHOP.max : null,
+  'Заявка скопирована. Чат в MAX откроется, когда укажем ссылку на менеджера.');
+
+/* ===== Пакет на первом экране ===== */
+const BAGS = [
+  { t:'Белый',    bag:'#ffffff', side:'#e3dcdd', rope:'#a82133', ink:'#a82133' },
+  { t:'Крафт',    bag:'#c9a26d', side:'#a98350', rope:'#7a5a33', ink:'#2b1a10' },
+  { t:'Чёрный',   bag:'#231d1f', side:'#0e0b0c', rope:'#56494c', ink:'#f4eaec' },
+  { t:'Бордовый', bag:'#a82133', side:'#7d1626', rope:'#4d0d17', ink:'#ffffff' }
+];
+$('bag-colors').innerHTML = BAGS.map((b, i) =>
+  `<label class="sw"><input type="radio" name="bag-color" id="bag-color-${i}" value="${i}"${i ? '' : ' checked'}><span><i style="background:${b.bag}"></i>${b.t}</span></label>`).join('');
+function paintBag(){
+  const b = BAGS[+document.querySelector('input[name="bag-color"]:checked').value], s = $('bag').style;
+  s.setProperty('--bag', b.bag); s.setProperty('--bag-side', b.side); s.setProperty('--bag-rope', b.rope); s.setProperty('--bag-ink', b.ink);
+  const text = ($('bag-text').value.trim() || 'Ваш логотип').toUpperCase();
+  const l = $('bag-label');
+  l.textContent = text;
+  l.setAttribute('font-size', Math.round(clamp(132 / (0.43 * text.length), 14, 46)));
+}
+$('bag-colors').addEventListener('change', paintBag);
+$('bag-text').addEventListener('input', paintBag);
+$('bag-calc').addEventListener('click', () => selectProduct('paper-bag', true));
+
+/* ===== Запуск ===== */
+$('shop-phone').textContent = SHOP.phone;
+$('call-phone').textContent = SHOP.phone;
+$('call-mail').textContent = SHOP.email;
+$('k-phone').textContent = SHOP.phone;
+$('k-mail').textContent = SHOP.email;
+$('k-address').textContent = SHOP.address;
+$('k-hours').textContent = SHOP.hours;
+$('k-map').href = SHOP.map;
+$('footer').textContent = SHOP.name + ' · ' + SHOP.address + ' · ' + SHOP.hours + ' · ' + SHOP.phone;
+load(); paintBag(); renderTiles(); renderForm(); renderResult(); renderOrder();
+</script>
+
+</body>
+</html>
